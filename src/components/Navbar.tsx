@@ -4,7 +4,6 @@ import { useTheme } from '../context/ThemeContext';
 
 const Navbar: React.FC = () => {
   const { theme, setTheme } = useTheme();
-  
   const themes: ('midnight' | 'emerald' | 'solarized' | 'light')[] = ['midnight', 'emerald', 'solarized', 'light'];
 
   return (
