@@ -1,31 +1,21 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode, useContext } from "react";
 
-// Implementation Specification (Module 3) - Updated themes
-type Theme = 'midnight' | 'emerald' | 'solarized' | 'light';
+// Module 3: Centralized State Management (Context API)
+type Theme = "midnight" | "emerald" | "solarized" | "light";
 
-interface ThemeContextType {
+type ThemeContextType = {
   theme: Theme;
   setTheme: (theme: Theme) => void;
-}
+};
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    const saved = localStorage.getItem('personal_theme');
-    return (saved as Theme) || 'midnight';
-  });
-
-  useEffect(() => {
-    localStorage.setItem('personal_theme', theme);
-  }, [theme]);
-
-  const setTheme = (newTheme: Theme) => setThemeState(newTheme);
+export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+  const [theme, setTheme] = useState<Theme>("light");
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
-      {/* 2. Define the Ventilation System (Provider) - wraps in div with theme class */}
-      <div className={`theme-${theme} min-h-screen app-wrapper`}>
+      <div className={`theme-${theme} min-h-screen transition-all duration-300`}>
         {children}
       </div>
     </ThemeContext.Provider>
@@ -34,6 +24,6 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
 export const useTheme = () => {
   const context = useContext(ThemeContext);
-  if (!context) throw new Error('useTheme must be used within a ThemeProvider');
+  if (!context) throw new Error("useTheme must be used within ThemeProvider");
   return context;
 };
